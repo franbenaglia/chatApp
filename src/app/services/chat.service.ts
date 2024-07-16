@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -7,6 +6,6 @@ import { Observable } from 'rxjs';
 })
 export class ChatService {
 
-
+  messages: any[] = [];
 
 }

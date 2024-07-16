@@ -40,6 +40,7 @@ export class AppComponent implements OnInit {
 
     if (token) {
       this.authService.setLogin(true)
+      this.authService.setUser(userName, token);
       this.user.name = userName;
       this.user.token = token;
     }

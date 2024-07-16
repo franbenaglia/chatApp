@@ -7,7 +7,7 @@ import { webSocket } from 'rxjs/webSocket';
 
 export class WebSocketService {
 
-  messages: string[] = [];
+  //messages: string[] = [];
 
   private readonly URL = 'ws://localhost:3010';
   

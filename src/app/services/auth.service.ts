@@ -13,6 +13,18 @@ export class AuthService {
   private urlresourceserver: string = environment.resourceserver;
 
   private logged: boolean = false;
+  private user: User;
+
+  setUser(userName: string, token: string) {
+    let user: User = new User();
+    user.name = userName;
+    user.token = token;
+    this.user = user;
+  }
+
+  getUser(): User {
+    return this.user;
+  }
 
   setLogin(logged: boolean) {
     this.logged = logged;
@@ -25,12 +37,6 @@ export class AuthService {
 
   isLoggedIn(): Boolean {
     return this.logged;
-  }
-
-  getUser(): User {
-    let user: User = new User();
-    user.name = 'peter';
-    return user;
   }
 
   googleOauth2Login(): void {

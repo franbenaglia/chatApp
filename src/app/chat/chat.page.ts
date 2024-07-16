@@ -5,20 +5,22 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, I
 import { WebSocketService } from '../services/web-socket.service';
 import { catchError, retry, throwError } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MessageContainerComponent } from '../message-container/message-container.component';
+import { AuthService } from '../services/auth.service';
+import { ChatService } from '../services/chat.service';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
   standalone: true,
-  imports: [IonButton, IonInput, IonCol, IonRow, IonGrid, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [MessageContainerComponent, IonButton, IonInput, IonCol, IonRow, IonGrid, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class ChatPage implements OnInit {
 
   message: string;
-  //messages: string[] = [];
 
-  constructor(private wsService: WebSocketService) {
+  constructor(private chatService: ChatService, private wsService: WebSocketService, private auth: AuthService) {
 
     this.wsService.webSocket$
       .pipe(
@@ -32,23 +34,25 @@ export class ChatPage implements OnInit {
         if (value.message) {
           const enc = new TextDecoder("utf-8");
           const text = enc.decode(new Uint8Array(value.message.data).buffer);
-          this.wsService.messages.push(text.substring(1, text.length - 1));
+          const jsonobj: any = JSON.parse(text);
+          this.chatService.messages.push(jsonobj);
         }
-        
+
       });
 
   }
 
-  getMessages(){
-    return this.wsService.messages;
+  getMessages() {
+    return this.chatService.messages;
   }
 
   ngOnInit() {
   }
 
   send() {
-    this.wsService.sendMessage(this.message);
-    this.message='';
+    let message = { user: this.auth.getUser().name, message: this.message };
+    this.wsService.sendMessage(message);
+    this.message = '';
   }
 
 

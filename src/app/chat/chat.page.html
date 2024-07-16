@@ -19,8 +19,8 @@
         <ion-button (click)="send()">Send</ion-button>
       </ion-col>
     </ion-row>
-    <ion-row *ngFor="let mes of getMessages() let i = index;"  [ngClass]="(i % 2 == 0) ? 'odd' : 'even'">
-         {{mes}}
+    <ion-row *ngFor="let message of getMessages() let i = index;">
+      <app-message-container [message]="message" [color]="(i % 2 == 0) ? 'primary' : 'light'"></app-message-container>
     </ion-row>
   </ion-grid>
 </ion-content>
