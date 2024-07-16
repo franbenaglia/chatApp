@@ -19,6 +19,7 @@ import { ChatService } from '../services/chat.service';
 export class ChatPage implements OnInit {
 
   message: string;
+  group: string = 'general';
 
   constructor(private chatService: ChatService, private wsService: WebSocketService, private auth: AuthService) {
 
@@ -50,7 +51,8 @@ export class ChatPage implements OnInit {
   }
 
   send() {
-    let message = { user: this.auth.getUser().name, message: this.message };
+    //TODO replace for Message
+    let message = { user: this.auth.getUser().name, message: this.message, group: this.group };
     this.wsService.sendMessage(message);
     this.message = '';
   }
