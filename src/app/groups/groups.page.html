@@ -10,4 +10,18 @@
       <ion-title size="large">Groups</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-select (ionChange)="setEvent($event)" label="Select group" placeholder="Select group" [value]="group">
+          <ion-select-option value="general">General</ion-select-option>
+          <ion-select-option value="opinionable">Opinionable</ion-select-option>
+          <ion-select-option value="fruit">Fruit</ion-select-option>
+        </ion-select>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>

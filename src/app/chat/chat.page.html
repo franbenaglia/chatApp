@@ -16,11 +16,14 @@
         <ion-input [(ngModel)]="message" label="Message" placeholder="Enter message"></ion-input>
       </ion-col>
       <ion-col>
+        <input label="Image" placeholder="Enter image" #imageInput type="file" accept="image/*" (change)="processFile(imageInput)"/>
+      </ion-col>
+      <ion-col>
         <ion-button (click)="send()">Send</ion-button>
       </ion-col>
     </ion-row>
     <ion-row *ngFor="let message of getMessages() let i = index;">
-      <app-message-container [message]="message" [color]="(i % 2 == 0) ? 'primary' : 'light'"></app-message-container>
+      <app-message-container [image]="message.image" [message]="message" [color]="(i % 2 == 0) ? 'primary' : 'light'"></app-message-container>
     </ion-row>
   </ion-grid>
 </ion-content>

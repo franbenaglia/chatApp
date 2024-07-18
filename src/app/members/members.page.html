@@ -10,4 +10,12 @@
       <ion-title size="large">Members</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-grid>
+    <ion-row *ngFor="let user of getUsers() let i = index;">
+      {{user}}
+    </ion-row>
+  </ion-grid>
+
+
 </ion-content>

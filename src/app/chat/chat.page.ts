@@ -8,6 +8,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessageContainerComponent } from '../message-container/message-container.component';
 import { AuthService } from '../services/auth.service';
 import { ChatService } from '../services/chat.service';
+import { Message } from '../model/message';
+import { imagetest } from '../image.const';
 
 @Component({
   selector: 'app-chat',
@@ -20,6 +22,8 @@ export class ChatPage implements OnInit {
 
   message: string;
   group: string = 'general';
+  //image: string = imagetest;
+  selectedFile: ImageSnippet;
 
   constructor(private chatService: ChatService, private wsService: WebSocketService, private auth: AuthService) {
 
@@ -37,25 +41,53 @@ export class ChatPage implements OnInit {
           const text = enc.decode(new Uint8Array(value.message.data).buffer);
           const jsonobj: any = JSON.parse(text);
           this.chatService.messages.push(jsonobj);
+          this.chatService.addConnectedUsers(jsonobj.user);
         }
-
       });
 
   }
+
+  processFile(imageInput: any) {
+
+    const file: File = imageInput.files[0];
+    const reader = new FileReader();
+
+    reader.addEventListener('load', (event: any) => {
+
+      this.selectedFile = new ImageSnippet(event.target.result, file);
+
+    });
+
+    reader.readAsDataURL(file);
+  }
+
 
   getMessages() {
     return this.chatService.messages;
   }
 
   ngOnInit() {
+    this.group = this.chatService.getGroup();
   }
 
   send() {
-    //TODO replace for Message
-    let message = { user: this.auth.getUser().name, message: this.message, group: this.group };
+
+    let message: Message = new Message();
+
+    message.user = this.auth.getUser().name;
+    message.message = this.message;
+    message.group = this.group;
+    message.image = this.selectedFile.src;
+
+    //let message = { user: this.auth.getUser().name, message: this.message, group: this.group };
     this.wsService.sendMessage(message);
+
     this.message = '';
   }
 
 
+}
+
+class ImageSnippet {
+  constructor(public src: string, public file: File) { }
 }
